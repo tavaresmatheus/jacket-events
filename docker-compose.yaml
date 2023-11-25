@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  jacket-events-api:
+    container_name: jacket-events-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+      - 8443:443
+    depends_on:
+      - jacket-events-database
+    networks:
+      - jacket-events-network
+
+  jacket-events-database:
+    container_name: jacket-events-database
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - 5432:5432
+    networks:
+      - jacket-events-network
+
+networks:
+  jacket-events-network:
+    driver: bridge
